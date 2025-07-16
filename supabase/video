@@ -1,0 +1,35 @@
+-- Create video call sessions table if it doesn't exist
+CREATE TABLE IF NOT EXISTS video_call_sessions (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES profiles(id) NOT NULL,
+  status TEXT NOT NULL CHECK (status IN ('available', 'busy', 'offline')),
+  channel_name TEXT,
+  matched_with UUID REFERENCES profiles(id),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Add indexes for faster queries
+CREATE INDEX IF NOT EXISTS video_call_sessions_user_id_idx ON video_call_sessions(user_id);
+CREATE INDEX IF NOT EXISTS video_call_sessions_status_idx ON video_call_sessions(status);
+
+-- Create a trigger function to delete records when status is set to 'offline'
+CREATE OR REPLACE FUNCTION delete_offline_video_call_sessions()
+RETURNS TRIGGER AS $$
+BEGIN
+  -- If the status is being updated to 'offline', delete the record instead
+  IF NEW.status = 'offline' THEN
+    DELETE FROM video_call_sessions WHERE id = NEW.id;
+    RETURN NULL; -- Prevents the update since we're deleting the record
+  END IF;
+  
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create the trigger on the video_call_sessions table
+DROP TRIGGER IF EXISTS delete_offline_video_call_sessions_trigger ON video_call_sessions;
+CREATE TRIGGER delete_offline_video_call_sessions_trigger
+  BEFORE UPDATE ON video_call_sessions
+  FOR EACH ROW
+  EXECUTE FUNCTION delete_offline_video_call_sessions();
