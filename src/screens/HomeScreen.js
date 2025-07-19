@@ -205,7 +205,7 @@ const HomeScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity
               style={styles.iconButton}
-              onPress={() => navigation.navigate('RandomVideoCall')}
+              onPress={() => navigation.navigate('HomePage')}
             >
               <LinearGradient
                 colors={['#ff66cc', '#ff3399']}

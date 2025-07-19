@@ -8,3 +8,9 @@
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 # Add any project specific keep options here:
+# Keep Zego SDK classes
+
+-keep class **.zego.**  { *; }
+
+-keep class com.hiennv.flutter_callkit_incoming.SharedPreferencesUtils* {*;}
+-keep class com.fasterxml.jackson.** {*;}

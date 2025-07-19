@@ -25,7 +25,14 @@ import SettingsScreen from '../screens/SettingsScreen';
 import PostsScreen from '../screens/PostsScreen';
 import ShortsScreen from '../screens/ShortsScreen';
 import RandomVideoCallScreen from '../screens/RandomVideoCallScreen';
+
+
+
+import HomePage from '../screens/HomePage';
+import CallPage from '../screens/CallPage';
+
 const Stack = createNativeStackNavigator();
+
 const Tab = createBottomTabNavigator();
 
 // Tab icon components defined outside of render function
@@ -122,6 +129,8 @@ export const AppNavigator = () => {
       <Stack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Posts" component={PostsScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Shorts" component={ShortsScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="HomePage" component={HomePage} />
+        <Stack.Screen name="CallPage" component={CallPage} />
       <Stack.Screen name="RandomVideoCall" component={RandomVideoCallScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
